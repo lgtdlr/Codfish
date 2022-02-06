@@ -89,7 +89,7 @@ def handleAnnualStats():
 @jwt_required()
 def updateDatabase():
     identity = get_jwt_identity()
-    print(identity)
+    print(EMAIL)
     if identity != 2 and identity != 3:
         return jsonify({"msg": "Access denied."}), 401
     mail = imaplib.IMAP4_SSL(SERVER)
