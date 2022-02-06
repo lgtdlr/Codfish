@@ -122,11 +122,11 @@ class TransactionDAO:
             result.append(row)
         return result
 
-    def updateDatabase(self, list):
+    def updateDatabase(self, tuple_list):
         cursor = self.conn.cursor()
         query = "INSERT INTO transaction(amount,date) VALUES (%s,%s);"
         try:
-            cursor.executemany(query, list)
+            cursor.executemany(query, tuple_list)
         except psycopg2.IntegrityError:
             self.conn.rollback()
             return None

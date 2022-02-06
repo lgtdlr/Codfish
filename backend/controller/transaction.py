@@ -3,8 +3,6 @@ from flask import jsonify
 from backend.model.transaction import TransactionDAO
 
 
-
-
 class BaseTransaction:
 
     def build_map_dict(self, row):
@@ -12,7 +10,7 @@ class BaseTransaction:
         return result
 
     def build_map_dict_monthly_stats(self, row):
-        result = {'year': row[0], 'month': row[0], 'month_number': row[0], 'month_income': row[1]}
+        result = {'year': row[0], 'month': row[1], 'month_number': row[2], 'month_income': row[3]}
         return result
 
     def build_map_dict_annual_stats(self, row):
@@ -71,12 +69,12 @@ class BaseTransaction:
         result = self.build_attr_dict(transaction_id, amount, date)
         return jsonify(result), 201
 
-    def updateDatabase(self, list):
+    def updateDatabase(self, tuple_list):
         dao = TransactionDAO()
-        transaction_id = dao.updateDatabase(list)
+        transaction_id = dao.updateDatabase(tuple_list)
         if transaction_id is None:
             return None
-        result = self.build_attr_dict(transaction_id, list)
+        result = self.build_attr_dict(transaction_id)
         return jsonify(result), 201
 
     def updateTransaction(self, transaction_id, json):
@@ -116,4 +114,3 @@ class BaseTransaction:
             obj = self.build_map_dict_annual_stats(row)
             result_list.append(obj)
         return jsonify(result_list), 200
-
