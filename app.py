@@ -21,11 +21,12 @@ from backend.controller.transaction import BaseTransaction
 
 app = Flask(__name__)
 
+load_dotenv(dotenv_path=".env")
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 app.config["JWT_EXPIRATION_DELTA"] = os.getenv("JWT_EXPIRATION_DELTA")
+
 jwt = JWTManager(app)
 
-load_dotenv(dotenv_path=".env")
 EMAIL = os.getenv('EMAIL')
 PASSWORD = os.getenv('EMAIL_PASSWORD')
 SERVER = os.getenv('EMAIL_SERVER')
@@ -89,10 +90,9 @@ def handleAnnualStats():
 @jwt_required()
 def updateDatabase():
     identity = get_jwt_identity()
-    print(EMAIL)
     if identity != 2 and identity != 3:
         return jsonify({"msg": "Access denied."}), 401
-    mail = imaplib.IMAP4_SSL(SERVER)
+    mail = imaplib.IMAP4_SSL(SERVER, port='993')
     mail.login(EMAIL, PASSWORD)
 
     # select the email folder
@@ -164,7 +164,8 @@ def updateDatabase():
                 amount = Decimal(found.group().strip('$'))
                 date = email.utils.parsedate_to_datetime(mail_date)
                 values_list.append((amount, date))
-    print(values_list)
+    if not values_list:
+        return jsonify({"msg": "Already synced!"}), 200
     BaseTransaction().updateDatabase(values_list)
     mail.logout()
     return jsonify({"msg": "Database updated!"}), 200
