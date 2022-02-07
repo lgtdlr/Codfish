@@ -112,7 +112,7 @@ class TransactionDAO:
 
     def getAnnualStats(self):
         cursor = self.conn.cursor()
-        query = """SELECT to_char(date_trunc('month', date), 'YYYY') AS year,
+        query = """SELECT to_char(date_trunc('year', date), 'YYYY') AS year,
                sum(amount) AS annual_income
                FROM transaction 
                GROUP BY date_trunc('year', date);"""
@@ -132,8 +132,9 @@ class TransactionDAO:
             return None
         else:
             try:
-                transaction_id = cursor.fetchone()[0]
+                # transaction_id = cursor.fetchone()[0]
+                affected_rows = cursor.rowcount
                 self.conn.commit()
-                return transaction_id
+                return affected_rows
             except psycopg2.IntegrityError:
                 return None

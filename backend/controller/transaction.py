@@ -74,7 +74,7 @@ class BaseTransaction:
         transaction_id = dao.updateDatabase(tuple_list)
         if transaction_id is None:
             return None
-        result = self.build_attr_dict(transaction_id)
+        result = transaction_id
         return jsonify(result), 201
 
     def updateTransaction(self, transaction_id, json):
