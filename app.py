@@ -6,7 +6,6 @@ import re
 import os
 import email.utils
 from decimal import Decimal
-from pytz import timezone
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
@@ -60,30 +59,30 @@ def handleLogin():
 
 
 @app.route('/codfish/range', methods=['POST'])
-# @jwt_required()
+@jwt_required()
 def handleTransactionsInRange():
-    # identity = get_jwt_identity()
-    # if identity != 2 and identity != 3:
-    #     return jsonify({"msg": "Access denied."}), 401
+    identity = get_jwt_identity()
+    if identity != 2 and identity != 3:
+        return jsonify({"msg": "Access denied."}), 401
     result = BaseTransaction().getTransactionsInRange(request.json)
     return result
 
 
 @app.route('/codfish/month', methods=['GET'])
-# @jwt_required()
+@jwt_required()
 def handleMonthlyStats():
-    # identity = get_jwt_identity()
-    # if identity != 2 and identity != 3:
-    #     return jsonify({"msg": "Access denied."}), 401
+    identity = get_jwt_identity()
+    if identity != 2 and identity != 3:
+        return jsonify({"msg": "Access denied."}), 401
     return BaseTransaction().getMonthlyStats()
 
 
 @app.route('/codfish/year', methods=['GET'])
-# @jwt_required()
+@jwt_required()
 def handleAnnualStats():
-    # identity = get_jwt_identity()
-    # if identity != 2 and identity != 3:
-    #     return jsonify({"msg": "Access denied."}), 401
+    identity = get_jwt_identity()
+    if identity != 2 and identity != 3:
+        return jsonify({"msg": "Access denied."}), 401
     return BaseTransaction().getAnnualStats()
 
 
