@@ -10,7 +10,8 @@ class BaseTransaction:
         return result
 
     def build_map_dict_monthly_stats(self, row):
-        result = {'year': row[0], 'month': row[1], 'month_number': row[2], 'month_income': row[3]}
+        result = {'year': row[0], 'month': row[1], 'month_number': row[2], 'month_income': row[3],
+                  'month_year': row[1] + " " + row[0]}
         return result
 
     def build_map_dict_annual_stats(self, row):
