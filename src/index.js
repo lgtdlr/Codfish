@@ -1,13 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Route, BrowserRouter, Routes} from 'react-router-dom';
 import './index.css';
-import App from './App';
+import 'fomantic-ui-css/semantic.css';
+import UserView from "./UserView";
+import LoginPage from "./LoginPage";
+import Dashboard from "./Dashboard";
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <BrowserRouter>
+        <Routes>
+            <Route exact path="/" element={<LoginPage/>} />
+            <Route exact path="/user" element={<UserView/>} />
+            <Route exact path="/dashboard" element={<Dashboard/>} />
+        </Routes>
+    </BrowserRouter>,
   document.getElementById('root')
 );
 
