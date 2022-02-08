@@ -11,7 +11,7 @@ const UserView = () =>{
     const navigate = useNavigate()
 
   const handleLogOut = () => {
-        sessionStorage.removeItem("token")
+        localStorage.removeItem("token")
         navigate("/")
   }
 
