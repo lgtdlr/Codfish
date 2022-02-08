@@ -19,7 +19,7 @@ from werkzeug.security import check_password_hash
 from backend.controller.account import BaseAccount
 from backend.controller.transaction import BaseTransaction
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='build/', static_url_path='/')
 
 load_dotenv(dotenv_path=".env")
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
@@ -32,6 +32,16 @@ PASSWORD = os.getenv('EMAIL_PASSWORD')
 SERVER = os.getenv('EMAIL_SERVER')
 
 CORS(app)
+
+
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
+
+
+@app.route('/<path:path>')
+def static_file(path):
+    return app.send_static_file(path)
 
 
 @app.route('/codfish/register', methods=['POST'])
@@ -97,7 +107,7 @@ def updateDatabase():
 
     # select the email folder
 
-    mail.select('"'+os.getenv("EMAIL_SELECTED_FOLDER")+'"', readonly=False)
+    mail.select('"' + os.getenv("EMAIL_SELECTED_FOLDER") + '"', readonly=False)
 
     status, data = mail.search(None,
                                '(UNSEEN FROM ' + os.getenv("EMAIL_FROM") + ')')

@@ -1,6 +1,6 @@
 import React, {Component, useEffect, useState} from 'react';
-import {Tab, Container, Header, Image, List, Modal, Segment} from "semantic-ui-react";
-import {Bar, BarChart, CartesianGrid, Cell, Legend, Tooltip, XAxis, YAxis} from "recharts";
+import {Tab, Container, Header, Image, List, Modal, Segment, Button} from "semantic-ui-react";
+import {Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import axios from "axios";
 import useWindowSize from "./utils/useWindowSize";
 import { scaleOrdinal } from 'd3-scale';
@@ -9,6 +9,7 @@ import { schemeCategory10 } from 'd3-scale-chromatic';
 const token = sessionStorage.getItem("token");
 const monthly_stats_url = process.env.REACT_APP_MONTHLY_STATS_URL || 'http://127.0.0.1:5000/codfish/month';
 const annual_stats_url = process.env.REACT_APP_ANNUAL_STATS_URL || 'http://127.0.0.1:5000/codfish/year';
+const update_stats_url = process.env.REACT_APP_SYNC_URL || 'http://127.0.0.1:5000/codfish/update'
 
 const colors = scaleOrdinal(schemeCategory10).range();
 
@@ -40,13 +41,24 @@ async function getAnnualStats() {
     })
 }
 
+async function updateStats() {
+
+    const requestOptions = {
+        headers: { Authorization: "Bearer " + token }
+    };
+
+    await axios.get(update_stats_url, requestOptions).then(function
+        (response) {
+    })
+}
+
 
 const Dashboard = () => {
 
     const panes = [
         { menuItem: 'Mensual', render: () => <Tab.Pane loading={isLoading}>
-                <Container centered>
-                    <BarChart width={width/5} height={width/4} data={monthlyStats} barSize={50}>
+                <ResponsiveContainer centered width={'99%'} height={400}>
+                    <BarChart width={width/5} height={width/4} data={monthlyData} barSize={50}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="month_year"/>
                         <YAxis domain={[0, 4000]}/>
@@ -58,10 +70,10 @@ const Dashboard = () => {
                             ))}
                         </Bar>
                     </BarChart>
-                </Container></Tab.Pane>, },
+                </ResponsiveContainer></Tab.Pane>, },
         { menuItem: 'Anual', render: () => <Tab.Pane loading={isLoading}>
-                <Container centered>
-                    <BarChart width={width/5} height={width/4} data={annualStats} barSize={50}>
+                <ResponsiveContainer centered>
+                    <BarChart width={width/5} height={width/4} data={annualData} barSize={50}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="year" />
                         <YAxis domain={[0, 20000]}/>
@@ -72,14 +84,24 @@ const Dashboard = () => {
                                 <Cell key={`cell-${index}`} fill={colors[index % 20]} />
                             ))}
                         </Bar>
-                    </BarChart></Container></Tab.Pane> },
+                    </BarChart></ResponsiveContainer></Tab.Pane> },
     ]
 
     const [monthlyStats, setMonthlyStats] = useState([]);
     const [annualStats, setAnnualStats] = useState([]);
     const [isLoading, setIsLoading] = useState([true]);
+    const [refresh, setRefresh] = useState(false)
 
     const { width } = useWindowSize();
+
+    const handleUpdate = () => {
+
+        setIsLoading(true);
+
+        updateStats().then(() => {
+            setRefresh(!refresh)
+        })
+    }
 
     useEffect(() => {
 
@@ -95,18 +117,24 @@ const Dashboard = () => {
         })
 
 
+    }, [refresh])
 
-    }, [])
+    useEffect(()=> {
 
+    });
     return (<div>
-            {isLoading === true && <Segment loading>
-    <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-  </Segment>}
+  {/*          {isLoading === true && <Segment loading>*/}
+  {/*  <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />*/}
+  {/*</Segment>}*/}
+
         <Segment>
 
 
     <Tab panes={panes} />
-
+            <Button content='Refresh'
+            primary onClick={() => {
+                handleUpdate()
+            }}/>
 
     </Segment>
     </div>)

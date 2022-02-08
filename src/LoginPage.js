@@ -15,7 +15,7 @@ const LoginPage = () => {
 
     const navigate = useNavigate();
 
-    const handleLogin = (event, newValue) => {
+    const handleLogin = () => {
 
         const requestOptions = {
             method: 'POST',
