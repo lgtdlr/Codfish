@@ -117,20 +117,13 @@ const Dashboard = () => {
     }, [])
 
     return (<div>
-  {/*          {isLoading === true && <Segment loading>*/}
-  {/*  <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />*/}
-  {/*</Segment>}*/}
-
         <Segment>
-
-
-    <Tab panes={panes} />
+            <Tab panes={panes} />
             <Button content='Refresh'
             primary onClick={() => {
                 handleUpdate()
             }}/>
-
-    </Segment>
+        </Segment>
     </div>)
 
 
