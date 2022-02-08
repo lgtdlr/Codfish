@@ -2,7 +2,6 @@ import React, {Component, useEffect, useState} from 'react';
 import {Tab, Container, Header, Image, List, Modal, Segment, Button} from "semantic-ui-react";
 import {Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import axios from "axios";
-import './LoginPage.css';
 import { scaleOrdinal } from 'd3-scale';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 import {useNavigate} from 'react-router-dom';
@@ -124,8 +123,10 @@ const Dashboard = () => {
     return (<div>
         <Segment>
             <Tab panes={panes} />
-            <Button className={'buttonStyle'} content='Refresh'
+            <Button content='Refresh'
             primary onClick={() => {
+                handleUpdate()
+            }} onKeyPress={()=>{
                 handleUpdate()
             }}/>
         </Segment>
