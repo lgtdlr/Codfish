@@ -89,14 +89,13 @@ const Dashboard = () => {
     const [monthlyStats, setMonthlyStats] = useState([]);
     const [annualStats, setAnnualStats] = useState([]);
     const [isLoading, setIsLoading] = useState([true]);
-    const [refresh, setRefresh] = useState(false)
 
     const handleUpdate = () => {
 
         setIsLoading(true);
 
         updateStats().then(() => {
-            setRefresh(!refresh)
+            window.location.reload(false);
         })
     }
 
@@ -105,6 +104,7 @@ const Dashboard = () => {
         getAnnualStats().then(() => {
             setAnnualStats(annualData)
             console.log("Annual stats" + annualStats)
+            setIsLoading(false);
         })
 
         getMonthlyStats().then(() => {
@@ -114,11 +114,8 @@ const Dashboard = () => {
         })
 
 
-    }, [refresh])
+    }, [])
 
-    useEffect(()=> {
-
-    });
     return (<div>
   {/*          {isLoading === true && <Segment loading>*/}
   {/*  <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />*/}
