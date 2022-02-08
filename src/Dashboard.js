@@ -5,7 +5,7 @@ import axios from "axios";
 import { scaleOrdinal } from 'd3-scale';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 
-const token = sessionStorage.getItem("token");
+const token = localStorage.getItem("token");
 const monthly_stats_url = process.env.REACT_APP_MONTHLY_STATS_URL || 'http://127.0.0.1:5000/codfish/month';
 const annual_stats_url = process.env.REACT_APP_ANNUAL_STATS_URL || 'http://127.0.0.1:5000/codfish/year';
 const update_stats_url = process.env.REACT_APP_SYNC_URL || 'http://127.0.0.1:5000/codfish/update'

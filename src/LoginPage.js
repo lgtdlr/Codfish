@@ -1,14 +1,12 @@
-import React, {Component, useState} from 'react';
-import {Button, Divider, Form, Grid, Header, Modal, Segment, Tab} from 'semantic-ui-react';
-import {Route, Navigate, BrowserRouter, Routes, useNavigate} from 'react-router-dom';
-import axios from "axios";
+import React, {useState} from 'react';
+import {Button, Form, Header, Segment} from 'semantic-ui-react';
+import {Navigate, useNavigate} from 'react-router-dom';
 
 
 const LoginPage = () => {
     require('dotenv').config();
     const url = process.env.REACT_APP_LOGIN_URL || 'http://127.0.0.1:5000/codfish/login';
-    const [open, setOpen] = useState(false);
-    const [token, setToken] = useState(sessionStorage.getItem("token"));
+    const [token, setToken] = useState(localStorage.getItem("token"));
     const [isAuth, setIsAuth] = useState(!!(token && token !== "undefined"));
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -23,12 +21,11 @@ const LoginPage = () => {
             body: JSON.stringify({ username: username, password: password})
         };
 
-        console.log(url)
         fetch(url, requestOptions)
         .then(response => response.json())
         .then(data => {
-            sessionStorage.setItem("token", data.access_token)
-            setIsAuth(sessionStorage.getItem("token")!=="undefined")
+            localStorage.setItem("token", data.access_token)
+            setIsAuth(localStorage.getItem("token")!=="undefined")
 
         });
     }
@@ -59,7 +56,6 @@ const LoginPage = () => {
                             />
                             <Button content='Login'
                                     primary onClick={() => {
-                                        console.log("TEST")
                                         handleLogin()
                                     if (isAuth){
                                         navigate("/user")
