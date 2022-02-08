@@ -5,6 +5,7 @@ import axios from "axios";
 import './LoginPage.css';
 import { scaleOrdinal } from 'd3-scale';
 import { schemeCategory10 } from 'd3-scale-chromatic';
+import {useNavigate} from 'react-router-dom';
 
 const monthly_stats_url = process.env.REACT_APP_MONTHLY_STATS_URL || 'http://127.0.0.1:5000/codfish/month';
 const annual_stats_url = process.env.REACT_APP_ANNUAL_STATS_URL || 'http://127.0.0.1:5000/codfish/year';
@@ -14,6 +15,7 @@ const colors = scaleOrdinal(schemeCategory10).range();
 
 let monthlyData = [];
 let annualData = [];
+
 
 async function getMonthlyStats(token) {
 
@@ -53,6 +55,8 @@ async function updateStats(token) {
 
 
 const Dashboard = () => {
+
+    const navigate = useNavigate();
 
     const panes = [
         { menuItem: 'Mensual', render: () => <Tab.Pane loading={isLoading}>
@@ -96,7 +100,7 @@ const Dashboard = () => {
         setIsLoading(true);
 
         updateStats(token).then(() => {
-            window.location.reload(false);
+            navigate("/user")
         })
     }
 
