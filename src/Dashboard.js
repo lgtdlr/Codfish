@@ -6,7 +6,6 @@ import './LoginPage.css';
 import { scaleOrdinal } from 'd3-scale';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 
-const token = localStorage.getItem("token");
 const monthly_stats_url = process.env.REACT_APP_MONTHLY_STATS_URL || 'http://127.0.0.1:5000/codfish/month';
 const annual_stats_url = process.env.REACT_APP_ANNUAL_STATS_URL || 'http://127.0.0.1:5000/codfish/year';
 const update_stats_url = process.env.REACT_APP_SYNC_URL || 'http://127.0.0.1:5000/codfish/update'
@@ -16,7 +15,7 @@ const colors = scaleOrdinal(schemeCategory10).range();
 let monthlyData = [];
 let annualData = [];
 
-async function getMonthlyStats() {
+async function getMonthlyStats(token) {
 
     const requestOptions = {
         headers: { Authorization: "Bearer " + token }
@@ -29,7 +28,7 @@ async function getMonthlyStats() {
 }
 
 
-async function getAnnualStats() {
+async function getAnnualStats(token) {
 
     const requestOptions = {
         headers: { Authorization: "Bearer " + token }
@@ -41,7 +40,7 @@ async function getAnnualStats() {
     })
 }
 
-async function updateStats() {
+async function updateStats(token) {
 
     const requestOptions = {
         headers: { Authorization: "Bearer " + token }
@@ -90,25 +89,26 @@ const Dashboard = () => {
     const [monthlyStats, setMonthlyStats] = useState([]);
     const [annualStats, setAnnualStats] = useState([]);
     const [isLoading, setIsLoading] = useState([true]);
+    const [token, setToken] = useState(localStorage.getItem("token"));
 
     const handleUpdate = () => {
 
         setIsLoading(true);
 
-        updateStats().then(() => {
+        updateStats(token).then(() => {
             window.location.reload(false);
         })
     }
 
     useEffect(() => {
 
-        getAnnualStats().then(() => {
+        getAnnualStats(token).then(() => {
             setAnnualStats(annualData)
             console.log("Annual stats" + annualStats)
             setIsLoading(false);
         })
 
-        getMonthlyStats().then(() => {
+        getMonthlyStats(token).then(() => {
             setMonthlyStats(monthlyData)
             console.log("Monthly stats" + monthlyStats)
             setIsLoading(false);
