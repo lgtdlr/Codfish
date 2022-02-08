@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import './LoginPage.css';
 import {Button, Form, Header, Segment} from 'semantic-ui-react';
 import {Navigate, useNavigate} from 'react-router-dom';
 
@@ -54,7 +55,7 @@ const LoginPage = () => {
                                 onChange={e => setPassword(e.target.value)}
                                 required
                             />
-                            <Button content='Login'
+                            <Button className={'buttonStyle'} content='Login'
                                     primary onClick={() => {
                                         handleLogin()
                                     if (isAuth){
