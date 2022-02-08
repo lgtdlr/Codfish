@@ -100,7 +100,7 @@ const Dashboard = () => {
 
         updateStats(token).then(() => {
             setIsLoading(false);
-            navigate("/user")
+            navigate("/")
         })
     }
 
