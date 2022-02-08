@@ -2,7 +2,6 @@ import React, {Component, useEffect, useState} from 'react';
 import {Tab, Container, Header, Image, List, Modal, Segment, Button} from "semantic-ui-react";
 import {Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import axios from "axios";
-import useWindowSize from "./utils/useWindowSize";
 import { scaleOrdinal } from 'd3-scale';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 
@@ -58,7 +57,7 @@ const Dashboard = () => {
     const panes = [
         { menuItem: 'Mensual', render: () => <Tab.Pane loading={isLoading}>
                 <ResponsiveContainer centered width={'99%'} height={400}>
-                    <BarChart width={width/5} height={width/4} data={monthlyData} barSize={50}>
+                    <BarChart data={monthlyData} barSize={50}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="month_year"/>
                         <YAxis domain={[0, 4000]}/>
@@ -72,8 +71,8 @@ const Dashboard = () => {
                     </BarChart>
                 </ResponsiveContainer></Tab.Pane>, },
         { menuItem: 'Anual', render: () => <Tab.Pane loading={isLoading}>
-                <ResponsiveContainer centered>
-                    <BarChart width={width/5} height={width/4} data={annualData} barSize={50}>
+                <ResponsiveContainer centered width={'99%'} height={400}>
+                    <BarChart data={annualData} barSize={50}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="year" />
                         <YAxis domain={[0, 20000]}/>
@@ -91,8 +90,6 @@ const Dashboard = () => {
     const [annualStats, setAnnualStats] = useState([]);
     const [isLoading, setIsLoading] = useState([true]);
     const [refresh, setRefresh] = useState(false)
-
-    const { width } = useWindowSize();
 
     const handleUpdate = () => {
 
