@@ -11,7 +11,7 @@ class BaseTransaction:
 
     def build_map_dict_daily_stats(self, row):
         result = {'day': row[0], 'day_month': row[0] + " " + row[1], 'month': row[1], 'month_number': row[2],
-                  'month_income': row[3]}
+                  'day_income': row[3]}
         return result
 
     def build_map_dict_monthly_stats(self, row):

@@ -72,10 +72,10 @@ const Dashboard = () => {
                     <BarChart data={dailyData} barSize={50}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="day_month"/>
-                        <YAxis domain={[0, 4000]}/>
+                        <YAxis domain={[0, 1000]}/>
                         <Tooltip />
                         {/*<Legend />*/}
-                        <Bar dataKey="month_income" fill="#8884d8"  label={{ position: 'top' }}>
+                        <Bar dataKey="day_income" fill="#8884d8"  label={{ position: 'top' }}>
                             {dailyStats.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={colors[index % 20]} />
                             ))}

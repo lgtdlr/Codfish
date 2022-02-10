@@ -9,19 +9,25 @@ const UserView = () =>{
     const [isAuth, setIsAuth] = useState(!!(token && token !== "undefined"));
     const navigate = useNavigate()
 
-  const handleLogOut = () => {
+
+    const handleLogOut = () => {
         localStorage.removeItem("token")
         navigate("/")
-  }
+    }
+
+    if (!isAuth) {
+        handleLogOut();
+    }
 
 
     const panes = [
         {
             menuItem: 'Dashboard', render : () => <Dashboard/>
-        },
-        {
-            menuItem: 'Advanced', render : () => <Advanced/>
         }
+        // ,
+        // {
+        //     menuItem: 'Advanced', render : () => <Advanced/>
+        // }
     ]
 
     return (
@@ -30,7 +36,7 @@ const UserView = () =>{
 
             <Menu secundary size={"small"}>
                 <Menu.Menu position={'right'}>
-                    <Menu.Item>Home</Menu.Item>
+                    {/*<Menu.Item>Home</Menu.Item>*/}
                     <Menu.Item onClick={handleLogOut}>Sign Out</Menu.Item>
                 </Menu.Menu>
             </Menu>
