@@ -96,6 +96,20 @@ class TransactionDAO:
         self.conn.commit()
         return affected_rows != 0
 
+    def getDailyStats(self):
+        cursor = self.conn.cursor()
+        query = """SELECT to_char(date_trunc('day', date), 'DD') AS day,
+       to_char(date_trunc('day', date), 'Mon') AS month,
+       to_char(date_trunc('day', date), 'MM') AS month_number,
+       sum(amount) AS monthly_income
+       FROM transaction WHERE date >= NOW() - INTERVAL '7 day'
+       GROUP BY date_trunc('day', date) ORDER BY day;"""
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def getMonthlyStats(self):
         cursor = self.conn.cursor()
         query = """SELECT to_char(date_trunc('month', date), 'YYYY') AS year,

@@ -78,6 +78,15 @@ def handleTransactionsInRange():
     return result
 
 
+@app.route('/codfish/day', methods=['GET'])
+@jwt_required()
+def handleDailyStats():
+    identity = get_jwt_identity()
+    if identity != 2 and identity != 3:
+        return jsonify({"msg": "Access denied."}), 401
+    return BaseTransaction().getDailyStats()
+
+
 @app.route('/codfish/month', methods=['GET'])
 @jwt_required()
 def handleMonthlyStats():

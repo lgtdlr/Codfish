@@ -1,12 +1,11 @@
-import React, {Component, useState} from 'react';
-import moment from 'moment';
-import {Button, Card, Container, Modal, Tab,Dropdown,Menu,Confirm} from "semantic-ui-react";
-import {Route, BrowserRouter, Routes, useNavigate} from 'react-router-dom';
+import React, {useState} from 'react';
+import {Container, Tab, Menu} from "semantic-ui-react";
+import {useNavigate} from 'react-router-dom';
 import Dashboard from "./Dashboard";
 import Advanced from "./Advanced";
 
 const UserView = () =>{
-    const [token, setToken] = useState(sessionStorage.getItem("token"));
+    const [token, setToken] = useState(localStorage.getItem("token"));
     const [isAuth, setIsAuth] = useState(!!(token && token !== "undefined"));
     const navigate = useNavigate()
 

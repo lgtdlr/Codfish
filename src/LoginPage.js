@@ -8,6 +8,7 @@ const LoginPage = () => {
     const url = process.env.REACT_APP_LOGIN_URL || 'http://127.0.0.1:5000/codfish/login';
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [isAuth, setIsAuth] = useState(!!(token && token !== "undefined"));
+    const [isLoading, setIsLoading] = useState(false)
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -32,14 +33,15 @@ const LoginPage = () => {
 
     if (!isAuth) {
         return (
-            <Segment><Header dividing textAlign="center" size="huge">Welcome</Header>
+            <Segment loading={isLoading}><Header dividing textAlign="center" size="huge">Welcome</Header>
             <Segment placeholder>
+
                 <Form>
                             <Form.Input
                                 icon='user'
                                 iconPosition='left'
-                                label='Username'
-                                placeholder='Username'
+                                label='Nombre de usuario'
+                                placeholder='Nombre'
                                 maxLength ='40'
                                 value = {username}
                                 onChange={e => setUsername(e.target.value)}
@@ -48,7 +50,8 @@ const LoginPage = () => {
                             <Form.Input
                                 icon='lock'
                                 iconPosition='left'
-                                label='Password'
+                                label='Contraseña'
+                                placeholder='******'
                                 type='password'
                                 value = {password}
                                 onChange={e => setPassword(e.target.value)}
@@ -56,12 +59,14 @@ const LoginPage = () => {
                             />
                             <Button content='Login'
                                     primary onClick={() => {
+                                        setIsLoading(true);
                                         handleLogin()
                                     if (isAuth){
                                         navigate("/user")
                                     }
                                     }}/>
                         </Form>
+
             </Segment>
 
         </Segment>

@@ -9,6 +9,11 @@ class BaseTransaction:
         result = {'transaction_id': row[0], 'amount': row[1], 'date': row[2]}
         return result
 
+    def build_map_dict_daily_stats(self, row):
+        result = {'day': row[0], 'day_month': row[0] + " " + row[1], 'month': row[1], 'month_number': row[2],
+                  'month_income': row[3]}
+        return result
+
     def build_map_dict_monthly_stats(self, row):
         result = {'year': row[0], 'month': row[1], 'month_number': row[2], 'month_income': row[3],
                   'month_year': row[1] + " " + row[0]}
@@ -97,6 +102,15 @@ class BaseTransaction:
             return jsonify("DELETED"), 200
         else:
             return jsonify("NOT FOUND"), 404
+
+    def getDailyStats(self):
+        dao = TransactionDAO()
+        transaction_list = dao.getDailyStats()
+        result_list = []
+        for row in transaction_list:
+            obj = self.build_map_dict_daily_stats(row)
+            result_list.append(obj)
+        return jsonify(result_list), 200
 
     def getMonthlyStats(self):
         dao = TransactionDAO()
