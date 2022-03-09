@@ -1,7 +1,7 @@
+import datetime
 import email
 import email.policy
 import imaplib
-from datetime import datetime
 import re
 import os
 import email.utils
@@ -23,7 +23,7 @@ app = Flask(__name__, static_folder='build/', static_url_path='/')
 
 load_dotenv(dotenv_path=".env")
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
-app.config["JWT_EXPIRATION_DELTA"] = os.getenv("JWT_EXPIRATION_DELTA")
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(minutes=int(os.getenv("JWT_EXPIRATION_DELTA")))
 
 jwt = JWTManager(app)
 

@@ -1,13 +1,23 @@
 import React, {useState} from 'react';
 import {Container, Tab, Menu} from "semantic-ui-react";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate, Router } from 'react-router-dom';
 import Dashboard from "./Dashboard";
+import jwt_decode from "jwt-decode";
 import Advanced from "./Advanced";
 
 const UserView = () =>{
-    const [token, setToken] = useState(localStorage.getItem("token"));
+    const [token, setToken] = useState(localStorage.getItem('token'));
     const [isAuth, setIsAuth] = useState(!!(token && token !== "undefined"));
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+
+    const checkTokenExpiration = () => {
+      const token = JSON.parse(localStorage.getItem("token"));
+
+      if (jwt_decode(token).exp < Date.now() / 1000) {
+        handleLogOut();
+      }
+    };
 
 
     const handleLogOut = () => {

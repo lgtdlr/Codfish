@@ -4,8 +4,7 @@ import {Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis,
 import axios from "axios";
 import { scaleOrdinal } from 'd3-scale';
 import { schemeCategory10 } from 'd3-scale-chromatic';
-import { Navigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';;
 
 const daily_stats_url = process.env.REACT_APP_DAILY_STATS_URL || 'http://127.0.0.1:5000/codfish/day';
 const monthly_stats_url = process.env.REACT_APP_MONTHLY_STATS_URL || 'http://127.0.0.1:5000/codfish/month';
@@ -19,7 +18,7 @@ let monthlyData = [];
 let annualData = [];
 
 
-async function getDashboardStats(token) {
+async function GetDashboardStats(token) {
 
     const requestOptions = {
         headers: { Authorization: "Bearer " + token }
@@ -48,7 +47,7 @@ async function getDashboardStats(token) {
 
 }
 
-async function updateStats(token) {
+async function UpdateStats(token) {
 
     const requestOptions = {
         headers: { Authorization: "Bearer " + token }
@@ -60,11 +59,13 @@ async function updateStats(token) {
         localStorage.removeItem("token");
     });
 
-    await getDashboardStats(token);
+    await GetDashboardStats(token);
 }
 
 
 const Dashboard = () => {
+
+    let navigate = useNavigate();
 
     const panes = [
         { menuItem: 'Diario', render: () => <Tab.Pane loading={isLoading}>
@@ -118,38 +119,31 @@ const Dashboard = () => {
     const [dailyStats, setDailyStats] = useState([]);
     const [isLoading, setIsLoading] = useState([true]);
     const [token, setToken] = useState(localStorage.getItem("token"));
-
-    const handleUpdate = () => {
-
-        setIsLoading(true);
-
-        updateStats(token).then(() => {
-            setIsLoading(false);
-            return <Navigate to='/'  />
-        })
-    }
-
     useEffect(() => {
 
-        updateStats(token).then(() => {
+        if (token == null) {
+            navigate("/")
+        }
+
+        UpdateStats(token).then(() => {
             setDailyStats(dailyData);
                 setAnnualStats(annualData);
                 setMonthlyStats(monthlyData);
                 setIsLoading(false);
+        }).catch(() => {
+            navigate("/")
         })
 
-
-
-    }, [])
+    }, [isLoading])
 
     return (<div>
         <Segment>
             <Tab panes={panes} />
             <Button content='Refresh'
             primary onClick={() => {
-                handleUpdate()
+                setIsLoading(true);
             }} onKeyPress={()=>{
-                handleUpdate()
+                setIsLoading(true);
             }}/>
         </Segment>
     </div>)

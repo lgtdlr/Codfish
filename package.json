@@ -9,6 +9,7 @@
     "axios": "^0.25.0",
     "dotenv": "^16.0.0",
     "fomantic-ui-css": "^2.8.8",
+    "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
