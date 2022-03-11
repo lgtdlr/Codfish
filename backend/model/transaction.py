@@ -138,7 +138,7 @@ class TransactionDAO:
 
     def updateDatabase(self, tuple_list):
         cursor = self.conn.cursor()
-        query = "INSERT INTO transaction(amount,date) VALUES (%s,%s);"
+        query = "INSERT INTO transaction(amount,date) VALUES (%s,%s) ON CONFLICT do nothing;"
         try:
             cursor.executemany(query, tuple_list)
         except psycopg2.IntegrityError:
