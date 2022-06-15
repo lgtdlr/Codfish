@@ -112,12 +112,13 @@ class TransactionDAO:
 
     def getMonthlyStats(self):
         cursor = self.conn.cursor()
-        query = """SELECT to_char(date_trunc('month', date), 'YYYY') AS year,
+        query = """SELECT * FROM (
+        SELECT to_char(date_trunc('month', date), 'YYYY') AS year,
        to_char(date_trunc('month', date), 'Mon') AS month,
        to_char(date_trunc('month', date), 'MM') AS month_number,
        sum(amount) AS monthly_income
        FROM transaction 
-       GROUP BY date_trunc('month', date);"""
+       GROUP BY date_trunc('month', date)) as data ORDER BY month_number;"""
         cursor.execute(query)
         result = []
         for row in cursor:
